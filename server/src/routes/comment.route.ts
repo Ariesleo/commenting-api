@@ -7,6 +7,9 @@ import verifyToken from '../middlewares/verifyToken';
 
 const router = express.Router();
 
+// Apply verifyToken middleware to routes where authentication is required
+router.use(verifyToken);
+
 router
   .route('/')
   .post(async (req: Request, res: Response, next: NextFunction) => {
