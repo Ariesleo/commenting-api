@@ -1,6 +1,6 @@
-import { Request, Response, NextFunction } from 'express';
 import logger from '../utils/logger';
 import statusCodes from '../constants/statusCodes';
+import { Request, Response, NextFunction } from 'express';
 
 const errorHandler = (
   err: any,
