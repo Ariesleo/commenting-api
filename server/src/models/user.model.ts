@@ -1,7 +1,8 @@
+import bcrypt from 'bcryptjs';
+import { v4 as uuidv4 } from 'uuid';
 import { sequelize } from '../db/db';
 import { Model, DataTypes } from 'sequelize';
-import { v4 as uuidv4 } from 'uuid';
-import UserI from '../Interface/user.interface';
+import { UserI } from '../Interface/user.interface';
 
 class User extends Model<UserI> implements UserI {
   public id!: string;
@@ -59,5 +60,13 @@ User.init(
     modelName: 'User',
   }
 );
+
+// Hash the password before saving
+User.beforeCreate(async (user) => {
+  if (user.password) {
+    const salt = bcrypt.genSaltSync(10);
+    user.password = bcrypt.hashSync(user.password, salt);
+  }
+});
 
 export default User;

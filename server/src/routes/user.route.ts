@@ -1,12 +1,17 @@
+import { register, login } from '../controllers/user.controller';
 import express, { NextFunction, Request, Response } from 'express';
-import { postUser } from '../controllers/user.controller';
 
 const router = express.Router();
 
 router
-  .route('/')
+  .route('/register')
   .post(async (req: Request, res: Response, next: NextFunction) => {
-    postUser(req, res, next);
+    register(req, res, next);
+  });
+router
+  .route('/login')
+  .post(async (req: Request, res: Response, next: NextFunction) => {
+    login(req, res, next);
   });
 
 export default router;

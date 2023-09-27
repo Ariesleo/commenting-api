@@ -1,9 +1,10 @@
 import { NextFunction, Request, Response } from 'express';
-import UserI from '../Interface/user.interface';
+import { UserI } from '../Interface/user.interface';
 import statusCodes from '../constants/statusCodes';
 import * as userService from '../services/user.service';
+import BadRequestError from '../lib/errors/badRequestError';
 
-const postUser = async (req: Request, res: Response, next: NextFunction) => {
+const register = async (req: Request, res: Response, next: NextFunction) => {
   const payload: UserI = req.body;
 
   try {
@@ -19,4 +20,26 @@ const postUser = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export { postUser };
+const login = async (req: Request, res: Response, next: NextFunction) => {
+  const payload = req.body;
+
+  const { email, password } = payload;
+
+  if (!email || !password) {
+    throw new BadRequestError('All fields are required.');
+  }
+
+  try {
+    const loginUser = await userService.signInUser(payload);
+
+    res.status(statusCodes.OK).send({
+      success: 'true',
+      message: 'User logged In',
+      data: loginUser,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export { register, login };

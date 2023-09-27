@@ -1,6 +1,8 @@
+import bcrypt from 'bcryptjs';
 import { User } from '../models';
-import UserI from '../Interface/user.interface';
+import { LoginUserI, UserI } from '../Interface/user.interface';
 import BadRequestError from '../lib/errors/badRequestError';
+import UnauthorizedError from '../lib/errors/unauthorizedError';
 
 const createUser = async (payload: UserI) => {
   try {
@@ -24,4 +26,31 @@ const createUser = async (payload: UserI) => {
   }
 };
 
-export { createUser };
+const loginUser = async (payload: LoginUserI) => {
+  const { email, password } = payload;
+  try {
+    // Find the user by email
+    const user = await User.findOne({
+      where: { email },
+    });
+
+    if (!user) {
+      throw new UnauthorizedError('Invalid email or password');
+    }
+
+    // Compare the provided password with the hashed password in the database
+    const passwordMatch = await bcrypt.compare(password, user.password);
+
+    if (passwordMatch) {
+      // Passwords match, return the user
+      return user;
+    } else {
+      // Passwords don't match, throw an error
+      throw new UnauthorizedError('Invalid email or password');
+    }
+  } catch (err) {
+    throw err;
+  }
+};
+
+export { createUser, loginUser };
