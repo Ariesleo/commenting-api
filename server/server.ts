@@ -1,8 +1,12 @@
 import app from './app';
+import { db } from './src/db/db';
 import logger from './src/utils/logger';
 import config from './src/config/config';
 
 const { port } = config;
+
+// connnect to database
+db();
 
 app.listen(port, () => {
   console.clear();
