@@ -14,6 +14,8 @@ interface Config {
   appUrl: string;
   port: number;
   dbConnectionUri: string;
+  jwtSecret: string;
+  jwtLifetime: string;
 }
 
 const config: Config = {
@@ -27,6 +29,8 @@ const config: Config = {
   appUrl: env.APP_URL || 'http://localhost:8080',
   port: parseInt(env.PORT || '8080', 10), // Parse as an integer with base 10
   dbConnectionUri: env.DB_CONNECTION_URI || '',
+  jwtSecret: env.JWT_SECRET || '',
+  jwtLifetime: env.JWT_LIFETIME || '',
 };
 
 export default config;
