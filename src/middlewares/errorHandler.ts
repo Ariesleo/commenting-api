@@ -8,14 +8,14 @@ const errorHandler = (
   res: Response,
   next: NextFunction
 ) => {
+  console.log({ err });
+
   const defaultError = {
     statusCode: err.status || statusCodes.INTERNAL_SERVER_ERROR,
     msg: err.message || 'Something went wrong, try again later',
   };
 
-  // Handle database errors
-
-  // Validation error
+  // Handle database errors Validation error
   if (err.name === 'SequelizeValidationError') {
     defaultError.statusCode = statusCodes.BAD_REQUEST;
     defaultError.msg = err.errors.map((e: any) => e.message).join(',');
